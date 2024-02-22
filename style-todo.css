@@ -1,0 +1,53 @@
+.hidden {
+  display: none;
+}
+
+.right {
+  display: flex;
+  flex-flow: column;
+  gap: 32px;
+  width: 100%;
+  align-items: center;
+  overflow-y: scroll;
+
+}
+
+.to-do {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  gap: 20px;
+  width: 85%;
+}
+
+.form,
+.task-zone {
+  width: 40%;
+ 
+}
+
+.form {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 16px;
+  max-width: 400px;
+  width: 100%;
+  min-width: 250px;
+}
+
+.add-task {
+  display: flex;
+  flex-flow: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 20px;
+  text-align: center;
+}
+
+.add-task input {
+  padding: 8px;
+  border-radius: 10px;
+}
