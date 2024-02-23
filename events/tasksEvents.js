@@ -1,7 +1,7 @@
-import { todoFactory, renderTask,saveToLocalStorage } from "../ulti.js";
+import { todoFactory, renderTask, saveToLocalStorage } from "../ulti.js";
 
-export function addTaskToTaskListOnClick( ) {
-let taskList = globalThis.taskList;
+export function addTaskToTaskListOnClick() { 
+
   const addTaskBtn = document.querySelector('.submit-button');
   const inputName = document.querySelector('.input-name');
   const inputDes = document.querySelector('.input-des');
@@ -25,6 +25,7 @@ let taskList = globalThis.taskList;
     if (inputName.value == '') {
       return
     } else {
+      console.log('add',globalThis.taskList);
       const taskName = `${inputName.value}`;
 
       const taskDes = `${inputDes.value}`;
@@ -40,10 +41,10 @@ let taskList = globalThis.taskList;
       })
 
       const newTodo = todoFactory(taskName, taskDes, tags);
-      taskList.push(newTodo);
+      globalThis.taskList.push(newTodo);
       saveToLocalStorage();
- 
-      renderTask( );
+
+      renderTask( globalThis.taskList);
       e.preventDefault();
       inputDes.value = '';
       inputName.value = '';

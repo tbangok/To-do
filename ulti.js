@@ -1,20 +1,18 @@
-export function renderTask() {
-  let taskList = globalThis.taskList;
+export function renderTask(list = []) {
   const taskZone = document.querySelector('.task-zone');
   taskZone.replaceChildren(''); //clear child de khong bi append vao chil co san
 
   const notiTask = document.createElement('div');
-  if (taskList.length === 0 && taskZone != null) {
+  if (globalThis.taskList.length === 0 && taskZone != null) {
     notiTask.textContent = 'No task found';
     taskZone.textContent = notiTask.textContent;
 
   } else {
 
-    const taskListElement = taskList.map(
-      createTaskElement
-    )
+    const taskListElement = list.map(createTaskElement)
     taskListElement.forEach(task => taskZone.appendChild(task))
   }
+  console.log('render', globalThis.taskList, 'list', list)
 }
 
 
@@ -59,17 +57,17 @@ function createTagsElements(tags = []) {
 }
 
 
-export function createButtonDone(id) {
-  let taskList = globalThis.taskList;
+function createButtonDone(id) {
   const doneButton = document.createElement('button');
   doneButton.classList.add('check');
   doneButton.addEventListener('click', function () {
-    taskList.forEach(task => {
+    globalThis.taskList.forEach(task => {
       if (task.id === id) {
         task.status = !task.status;
         // console.log(task)
-        renderTask();
+        renderTask(globalThis.taskList);
         saveToLocalStorage()
+
       }
     })
 
@@ -78,15 +76,17 @@ export function createButtonDone(id) {
 }
 
 
-export function createButtonDelete(id) {
+function createButtonDelete(id) {
 
   const deleteButton = document.createElement('button');
   deleteButton.classList.add('del');
-  
+
   deleteButton.addEventListener('click', function () {
     globalThis.taskList = globalThis.taskList.filter(task => task.id != id)
-    renderTask();
+    renderTask(globalThis.taskList);
     saveToLocalStorage();
+    console.log('delete', globalThis.taskList)
+
   })
   return deleteButton
 }
@@ -104,8 +104,33 @@ export function todoFactory(name, description, tags) {
   }
 }
 
+
 export function saveToLocalStorage() {
 
   localStorage.setItem('tasks', JSON.stringify(globalThis.taskList));
 
+}
+
+
+//filter
+
+export function hideDoneTask() {
+
+  const hideDoneButton = document.querySelector('.hide-done');
+  //tao shadow list
+
+  function hideDone() {
+    let taskListTempt = globalThis.taskList;
+    taskListTempt = globalThis.taskList.filter(task => task.status != true);
+    if (hideDoneButton.checked) {
+      renderTask(taskListTempt)
+    } else {
+      renderTask(globalThis.taskList)
+    }
+  }
+
+
+  hideDoneButton.addEventListener('click', hideDone)
+  //filter bang ststus
+  //reload uncheck
 }
