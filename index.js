@@ -1,7 +1,18 @@
-import { menuToggle } from "./events.js";
-import { addTask } from "./events.js";
-import { hideDone } from "./events.js";
+import { renderTask } from "./ulti.js";
+import { addTaskToTaskListOnClick } from "./events/tasksEvents.js";
 
-menuToggle();
-addTask();
-hideDone()
+function app() {
+
+  console.log('hello');
+
+  globalThis.taskList = JSON.parse(localStorage.getItem('tasks')) || [];
+
+  renderTask();
+
+  addTaskToTaskListOnClick();
+
+  console.log(globalThis.taskList);
+
+}
+
+app();
