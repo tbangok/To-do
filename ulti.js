@@ -128,9 +128,46 @@ export function hideDoneTask() {
       renderTask(globalThis.taskList)
     }
   }
+  hideDoneButton.addEventListener('click', hideDone);
+
+}
 
 
-  hideDoneButton.addEventListener('click', hideDone)
-  //filter bang ststus
-  //reload uncheck
+export function sortByName() {
+
+  const sortNameAscending = document.querySelector('.name-ascending');
+  const sortNameDecending = document.querySelector('.name-decending');
+  //tao shadow list
+
+  function sortName() {
+    let taskListTempt = globalThis.taskList;
+
+
+    if (sortNameAscending.checked) {
+      taskListTempt = globalThis.taskList.sort((a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+      })
+
+    } if (sortNameDecending.checked) {
+      taskListTempt = globalThis.taskList.sort((a, b) => {
+        if (a.name < b.name) {
+          return 1;
+        }
+        if (a.name > b.name) {
+          return -1;
+        }
+      })
+    }
+
+    renderTask(taskListTempt)
+
+  }
+  sortNameAscending.addEventListener('click', sortName);
+  sortNameDecending.addEventListener('click', sortName);
+
 }
