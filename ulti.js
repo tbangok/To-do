@@ -12,7 +12,7 @@ export function renderTask(list = []) {
     const taskListElement = list.map(createTaskElement)
     taskListElement.forEach(task => taskZone.appendChild(task))
   }
-  console.log('render', globalThis.taskList, 'list', list)
+  // console.log('render', globalThis.taskList, 'list', list)
 }
 
 
@@ -127,7 +127,8 @@ export function filterFactory() {
     globalThis.filterObj.sortByDate = null;
     globalThis.filterObj.sortByName = null;
     globalThis.filterObj.tag = `${tag.textContent}`;
-    console.log(globalThis.filterObj)
+    console.log('tagg', globalThis.filterObj)
+
   }))
 
   const sortNameAscending = document.querySelector('.name-ascending');
@@ -172,29 +173,32 @@ export function filterFactory() {
   filterBtn.addEventListener('click', filter)
   tags.forEach(tag => tag.addEventListener('click', filter))
 }
-
+ 
 export function filter() {
   let taskListTempt = globalThis.taskList;
   //done
 
   if (globalThis.filterObj.hideDone) {
-    taskListTempt = globalThis.taskList.filter(task => task.status != true);
+    taskListTempt = taskListTempt.filter(task => task.status!=true);
     renderTask(taskListTempt);
+    console.log(taskListTempt)
   } else renderTask(taskListTempt);
 
   //tag 
+  let taskListTemptTag = taskListTempt;
   if (globalThis.filterObj.tag) {
-    let taskListTemptTag = taskListTempt.filter(task => task.tags.includes(globalThis.filterObj.tag));
+    taskListTemptTag = taskListTempt.filter(task => task.tags.includes(globalThis.filterObj.tag));
     console.log('click', taskListTempt)
     renderTask(taskListTemptTag);
   } else renderTask(taskListTempt);
 
 
-
   //sort name
 
+  let taskListTemptSort = taskListTempt;
+
   if (globalThis.filterObj.sortByName === 'ascending') {
-    taskListTempt = taskListTempt.sort((a, b) => {
+    taskListTemptSort = taskListTemptSort.sort((a, b) => {
 
       if (a.name < b.name) {
         return -1;
@@ -202,43 +206,44 @@ export function filter() {
       else return 1;
 
     })
-    renderTask(taskListTempt);
+    renderTask(taskListTemptSort);
 
   } else if (globalThis.filterObj.sortByName === 'descending') {
-    taskListTempt = taskListTempt.sort((a, b) => {
+    taskListTemptSort = taskListTemptSort.sort((a, b) => {
       if (a.name < b.name) {
         return 1;
       }
       else return -1;
 
     })
-    renderTask(taskListTempt);
+    renderTask(taskListTemptSort);
 
   }
 
   //sort date
   if (globalThis.filterObj.sortByDate === 'ascending') {
-    taskListTempt = taskListTempt.sort((a, b) => {
+    taskListTemptSort = taskListTemptSort.sort((a, b) => {
       if (a.create < b.create) {
         return -1;
       }
       else return 1;
 
     })
-    renderTask(taskListTempt);
+    renderTask(taskListTemptSort);
 
   } else if (globalThis.filterObj.sortByDate === 'descending') {
-    taskListTempt = taskListTempt.sort((a, b) => {
+    taskListTemptSort = taskListTemptSort.sort((a, b) => {
       if (a.create < b.create) {
         return 1;
       }
       else return -1;
 
     })
-    renderTask(taskListTempt);
+    renderTask(taskListTemptSort);
 
   }
 
-  // renderTask(taskListTempt);
+  filterFactory();
+  // renderTask(taskListTemptSort);
 
 }
