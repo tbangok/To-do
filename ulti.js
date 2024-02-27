@@ -64,17 +64,13 @@ function createButtonDone(id) {
     globalThis.taskList.forEach(task => {
       if (task.id === id) {
         task.status = !task.status;
-        // console.log(task)
         renderTask(globalThis.taskList);
         saveToLocalStorage()
-
       }
     })
-
   })
   return doneButton
 }
-
 
 function createButtonDelete(id) {
 
@@ -86,11 +82,9 @@ function createButtonDelete(id) {
     renderTask(globalThis.taskList);
     saveToLocalStorage();
     console.log('delete', globalThis.taskList)
-
   })
   return deleteButton
 }
-
 
 export function todoFactory(name, description, tags) {
 
@@ -114,60 +108,137 @@ export function saveToLocalStorage() {
 
 //filter
 
-export function hideDoneTask() {
+
+
+export function filterFactory() {
+
+  const filterBtn = document.querySelector('.filter');
 
   const hideDoneButton = document.querySelector('.hide-done');
-  //tao shadow list
 
-  function hideDone() {
-    let taskListTempt = globalThis.taskList;
-    taskListTempt = globalThis.taskList.filter(task => task.status != true);
+  hideDoneButton.addEventListener('click', () => {
     if (hideDoneButton.checked) {
-      renderTask(taskListTempt)
-    } else {
-      renderTask(globalThis.taskList)
-    }
-  }
-  hideDoneButton.addEventListener('click', hideDone);
+      globalThis.filterObj.hideDone = true
+    } else globalThis.filterObj.hideDone = false
+  })
 
-}
-
-
-export function sortByName() {
+  const tags = document.querySelectorAll('.tag');
+  tags.forEach(tag => tag.addEventListener('click', () => {
+    globalThis.filterObj.sortByDate = null;
+    globalThis.filterObj.sortByName = null;
+    globalThis.filterObj.tag = `${tag.textContent}`;
+    console.log(globalThis.filterObj)
+  }))
 
   const sortNameAscending = document.querySelector('.name-ascending');
-  const sortNameDecending = document.querySelector('.name-decending');
-  //tao shadow list
+  const sortNameDescending = document.querySelector('.name-descending');
 
-  function sortName() {
-    let taskListTempt = globalThis.taskList;
+  sortNameAscending.addEventListener('click', () => {
+    globalThis.filterObj.sortByName = 'ascending';
+    globalThis.filterObj.sortByDate = null;
+    globalThis.filterObj.tag = null;
+    console.log(globalThis.filterObj)
+  });
+
+  sortNameDescending.addEventListener('click', () => {
+    globalThis.filterObj.sortByName = 'descending';
+    globalThis.filterObj.sortByDate = null;
+    globalThis.filterObj.tag = null;
+    console.log(globalThis.filterObj)
+
+  });
+
+  const sortDateAscending = document.querySelector('.date-ascending');
+  const sortDateDescending = document.querySelector('.date-descending');
+
+  sortDateAscending.addEventListener('click', () => {
+    globalThis.filterObj.sortByDate = 'ascending';
+    globalThis.filterObj.sortByName = null;
+    globalThis.filterObj.tag = null;
+    console.log(globalThis.filterObj)
+
+  });
+
+  sortDateDescending.addEventListener('click', () => {
+    globalThis.filterObj.sortByDate = 'descending';
+    globalThis.filterObj.sortByName = null;
+    globalThis.filterObj.tag = null;
+    console.log(globalThis.filterObj)
+
+  });
 
 
-    if (sortNameAscending.checked) {
-      taskListTempt = globalThis.taskList.sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-      })
 
-    } if (sortNameDecending.checked) {
-      taskListTempt = globalThis.taskList.sort((a, b) => {
-        if (a.name < b.name) {
-          return 1;
-        }
-        if (a.name > b.name) {
-          return -1;
-        }
-      })
-    }
+  filterBtn.addEventListener('click', filter)
+  tags.forEach(tag => tag.addEventListener('click', filter))
+}
 
-    renderTask(taskListTempt)
+export function filter() {
+  let taskListTempt = globalThis.taskList;
+  //done
+
+  if (globalThis.filterObj.hideDone) {
+    taskListTempt = globalThis.taskList.filter(task => task.status != true);
+    renderTask(taskListTempt);
+  } else renderTask(taskListTempt);
+
+  //tag 
+  if (globalThis.filterObj.tag) {
+    let taskListTemptTag = taskListTempt.filter(task => task.tags.includes(globalThis.filterObj.tag));
+    console.log('click', taskListTempt)
+    renderTask(taskListTemptTag);
+  } else renderTask(taskListTempt);
+
+
+
+  //sort name
+
+  if (globalThis.filterObj.sortByName === 'ascending') {
+    taskListTempt = taskListTempt.sort((a, b) => {
+
+      if (a.name < b.name) {
+        return -1;
+      }
+      else return 1;
+
+    })
+    renderTask(taskListTempt);
+
+  } else if (globalThis.filterObj.sortByName === 'descending') {
+    taskListTempt = taskListTempt.sort((a, b) => {
+      if (a.name < b.name) {
+        return 1;
+      }
+      else return -1;
+
+    })
+    renderTask(taskListTempt);
 
   }
-  sortNameAscending.addEventListener('click', sortName);
-  sortNameDecending.addEventListener('click', sortName);
+
+  //sort date
+  if (globalThis.filterObj.sortByDate === 'ascending') {
+    taskListTempt = taskListTempt.sort((a, b) => {
+      if (a.create < b.create) {
+        return -1;
+      }
+      else return 1;
+
+    })
+    renderTask(taskListTempt);
+
+  } else if (globalThis.filterObj.sortByDate === 'descending') {
+    taskListTempt = taskListTempt.sort((a, b) => {
+      if (a.create < b.create) {
+        return 1;
+      }
+      else return -1;
+
+    })
+    renderTask(taskListTempt);
+
+  }
+
+  // renderTask(taskListTempt);
 
 }

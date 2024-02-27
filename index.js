@@ -1,4 +1,4 @@
-import { renderTask, hideDoneTask, sortByName } from "./ulti.js";
+import { renderTask, filter, filterFactory } from "./ulti.js";
 import { addTaskToTaskListOnClick } from "./events/tasksEvents.js";
 import { menuToggle } from "./events/menuEvents.js";
 
@@ -10,14 +10,19 @@ function app() {
 
   globalThis.taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 
-  renderTask( globalThis.taskList);
+  renderTask(globalThis.taskList);
 
   addTaskToTaskListOnClick();
 
-  hideDoneTask();
-  sortByName();
+  globalThis.filterObj = {
+    hideDone: false,
+    sortByName: null,
+    sortByDate: null,
+    tag: null
+  }
+  filterFactory()
 
-  console.log(globalThis.taskList);
+  // console.log(globalThis.taskList);
 
 }
 
